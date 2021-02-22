@@ -69,7 +69,7 @@ $widget.setTimeline({
     return {
       type: "hstack",
       props: {
-        background: $color("white"),
+        //background: $color("white"),
         alignment: $widget.horizontalAlignment.right,
         spacing: 15,
         frame: {
