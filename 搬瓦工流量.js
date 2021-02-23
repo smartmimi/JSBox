@@ -10,7 +10,7 @@ $http.request({
     let html = resp.data;
     let datacounter = html["data_counter"];
     let data_next_reset = html["data_next_reset"];
-    let data = (datacounter / (12024 * 1024 * 1024)).toFixed(2);
+    let data = (datacounter / (1024 * 1024 * 1024)).toFixed(2);
     let reset = redate(data_next_reset);
     $ui.success("已用" + data + "/500G重置时间：" + reset);
   }
