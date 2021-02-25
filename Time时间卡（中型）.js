@@ -5,10 +5,10 @@
 注意:
 1、tlist内序号、日期需要按增序排列
 2、选择中型小组件
-如果某些区域显示不全，可在28行调节个区域宽度
+入某些区域显示不全，可在26行调节个区域宽度
 */
 var tlist = {
-  1: ["春节", "2021-02-11"],
+  1: ["春节", "2021-02-12"],
   2: ["元宵", "2021-02-26"],
   3: ["清明", "2021-04-04"],
   4: ["劳动", "2021-05-01"],
@@ -57,13 +57,25 @@ function tnumcount(num) {
 获取最接近的日期
 */
 function now() {
-  for (var i = 1; i++; i <= tlist.length) {
-    if (dateDiff(tnowf, tlist[i][1]) >= 0) {
+  for (var i = 1;  i <= Object.getOwnPropertyNames(tlist).length;i++) {
+    if (Number(dateDiff(tnowf, tlist[i.toString()][1])) >=0) {
+      console.log("最近的日期是:"+tlist[i.toString()][0]);
+      console.log("列表长度:"+Object.getOwnPropertyNames(tlist).length);
+      console.log("时间差距:"+Number(dateDiff(tnowf, tlist[i.toString()][1])));
       return i;
     }
   }
 }
+//如果是0天，发送emoji;
 let nowlist = now();
+function today(day){
+  let daythis =day;
+  if (daythis =="0"){
+    return "🎉"
+  }else{
+    return daythis
+  }
+}
 $widget.setTimeline({
   render: ctx => {
     return {
@@ -89,7 +101,7 @@ $widget.setTimeline({
             {
               type: "text",
               props: {
-                text: tnumcount(nowlist),
+                text: today(tnumcount(nowlist)),
                 font: $font(40),
                 bold: true,
                 color: $color("red"),
@@ -103,10 +115,10 @@ $widget.setTimeline({
               type: "color",
               props: {
                 frame: {
-                  width: 30,
+                  width: 35,
                   height: 5
                 },
-                color: "red",
+                color: $color("red"),
                 cornerRadius: 3
               }
             },
