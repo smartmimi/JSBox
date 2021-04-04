@@ -57,23 +57,38 @@ function tnumcount(num) {
 获取最接近的日期
 */
 function now() {
-  for (var i = 1;  i <= Object.getOwnPropertyNames(tlist).length;i++) {
-    if (Number(dateDiff(tnowf, tlist[i.toString()][1])) >=0) {
-      console.log("最近的日期是:"+tlist[i.toString()][0]);
-      console.log("列表长度:"+Object.getOwnPropertyNames(tlist).length);
-      console.log("时间差距:"+Number(dateDiff(tnowf, tlist[i.toString()][1])));
+  for (var i = 1; i <= Object.getOwnPropertyNames(tlist).length; i++) {
+    if (Number(dateDiff(tnowf, tlist[i.toString()][1])) >= 0) {
+      console.log("最近的日期是:" + tlist[i.toString()][0]);
+      console.log("列表长度:" + Object.getOwnPropertyNames(tlist).length);
+      console.log("时间差距:" + Number(dateDiff(tnowf, tlist[i.toString()][1])));
       return i;
     }
   }
 }
 //如果是0天，发送emoji;
 let nowlist = now();
-function today(day){
-  let daythis =day;
-  if (daythis =="0"){
+
+function today(day) {
+  let daythis = day;
+  if (daythis == "0") {
+    datenotice();
     return "🎉"
-  }else{
+  } else {
     return daythis
+  }
+}
+//提醒日当天发送通知
+function datenotice() {
+  if ($cache.get("pushed") != tlist[nowlist][1] && tnow.getHours() >= 6) {
+    $cache.set("pushed", tlist[nowlist][1]);
+    $push.schedule({
+      title: "时间卡提醒",
+      body: "今天是" + tlist[nowlist][1] + "日 "+
+      tlist[nowlist][0] + " 🎉"
+    })
+  }else if($cache.get("pushed")==tlist[nowlist][1]){
+    console.log("当日已通知")
   }
 }
 $widget.setTimeline({
@@ -90,15 +105,13 @@ $widget.setTimeline({
         },
         padding: 18
       },
-      views: [
-        {
+      views: [{
           type: "vstack",
           props: {
             alignment: $widget.verticalAlignment.right,
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: today(tnumcount(nowlist)),
@@ -160,8 +173,7 @@ $widget.setTimeline({
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][0],
@@ -222,8 +234,7 @@ $widget.setTimeline({
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tnumcount(Number(nowlist) + Number(1)),
@@ -283,8 +294,7 @@ $widget.setTimeline({
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][1],
