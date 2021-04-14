@@ -5,7 +5,6 @@
 注意:
 1、tlist内序号、日期需要按增序排列
 2、选择中型小组件
-入某些区域显示不全，可在26行调节个区域宽度
 */
 var tlist = {
   1: ["春节", "2021-02-12"],
@@ -13,20 +12,17 @@ var tlist = {
   3: ["清明", "2021-04-04"],
   4: ["劳动", "2021-05-01"],
   5: ["端午", "2021-06-12"],
-  6: ["中秋", "2021-09-19"],
-  7: ["国庆", "2021-10-01"],
-  8: ["元旦", "2022-01-01"],
-  9: ["春节", "2022-02-01"],
-  10: ["元宵", "2022-02-15"],
-  11: ["清明", "2022-04-05"],
-  12: ["劳动", "2022-05-01"],
-  13: ["端午", "2022-06-03"],
-  14: ["中秋", "2022-09-10"]
+  6: ["测试长度", "2021-06-30"],
+  7: ["中秋", "2021-09-19"],
+  8: ["国庆", "2021-10-01"],
+  9: ["元旦", "2022-01-01"],
+  10: ["春节", "2022-02-01"],
+  11: ["元宵", "2022-02-15"],
+  12: ["清明", "2022-04-05"],
+  13: ["劳动", "2022-05-01"],
+  14: ["端午", "2022-06-03"],
+  15: ["中秋", "2022-09-10"]
 };
-//设置小组件右侧显示的各部分的宽度
-let tnamewidth = 40; //名称宽度
-let tcountwidth = 50; //倒数日宽度
-let tdatewidth = 70; //日期宽度
 
 let tnow = new Date();
 let tnowf =
@@ -61,7 +57,9 @@ function now() {
     if (Number(dateDiff(tnowf, tlist[i.toString()][1])) >= 0) {
       console.log("最近的日期是:" + tlist[i.toString()][0]);
       console.log("列表长度:" + Object.getOwnPropertyNames(tlist).length);
-      console.log("时间差距:" + Number(dateDiff(tnowf, tlist[i.toString()][1])));
+      console.log(
+        "时间差距:" + Number(dateDiff(tnowf, tlist[i.toString()][1]))
+      );
       return i;
     }
   }
@@ -73,9 +71,9 @@ function today(day) {
   let daythis = day;
   if (daythis == "0") {
     datenotice();
-    return "🎉"
+    return "🎉";
   } else {
-    return daythis
+    return daythis;
   }
 }
 //提醒日当天发送通知
@@ -84,20 +82,26 @@ function datenotice() {
     $cache.set("pushed", tlist[nowlist][1]);
     $push.schedule({
       title: "时间卡提醒",
-      body: "今天是" + tlist[nowlist][1] + "日 "+
-      tlist[nowlist][0] + " 🎉"
-    })
-  }else if($cache.get("pushed")==tlist[nowlist][1]){
-    console.log("当日已通知")
+      body: "今天是" + tlist[nowlist][1] + "日 " + tlist[nowlist][0] + " 🎉"
+    });
+  } else if ($cache.get("pushed") == tlist[nowlist][1]) {
+    console.log("当日已通知");
   }
 }
 $widget.setTimeline({
   render: ctx => {
+    const width = $widget.displaySize.width;
+//console.log(width);
+//设置小组件右侧显示的各部分的宽度
+let tnamewidth = width/2; //名称宽度
+let tcountwidth = width/4; //倒数日宽度
+let tdatewidth = width/2; //日期宽度
+
     return {
       type: "hstack",
       props: {
         //background: $color("white"),
-        alignment: $widget.horizontalAlignment.right,
+        alignment: $widget.verticalAlignment.right,
         spacing: 15,
         frame: {
           maxWidth: Infinity,
@@ -105,13 +109,15 @@ $widget.setTimeline({
         },
         padding: 18
       },
-      views: [{
+      views: [
+        {
           type: "vstack",
           props: {
-            alignment: $widget.verticalAlignment.right,
+            alignment: $widget.horizontalAlignment.center,
             spacing: 10
           },
-          views: [{
+          views: [
+            {
               type: "text",
               props: {
                 text: today(tnumcount(nowlist)),
@@ -147,17 +153,6 @@ $widget.setTimeline({
                 }
               }
             }
-            //            {
-            //              type: "color",
-            //              props: {
-            //                frame: {
-            //                  width: 5,
-            //                  height: 5
-            //                },
-            //                color: "red",
-            //                cornerRadius: 3
-            //              }
-            //            }
           ]
         },
         {
@@ -173,7 +168,8 @@ $widget.setTimeline({
             alignment: "center",
             spacing: 10
           },
-          views: [{
+          views: [
+            {
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][0],
@@ -234,7 +230,8 @@ $widget.setTimeline({
             alignment: "center",
             spacing: 10
           },
-          views: [{
+          views: [
+            {
               type: "text",
               props: {
                 text: tnumcount(Number(nowlist) + Number(1)),
@@ -288,13 +285,15 @@ $widget.setTimeline({
             }
           ]
         },
+//详细日期
         {
           type: "vstack",
           props: {
             alignment: "center",
             spacing: 10
           },
-          views: [{
+          views: [
+            {
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][1],
