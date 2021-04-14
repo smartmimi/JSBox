@@ -94,9 +94,9 @@ $widget.setTimeline({
     const width = $widget.displaySize.width;
 //console.log(width);
 //设置小组件右侧显示的各部分的宽度
-let tnamewidth = width/2; //名称宽度
-let tcountwidth = width/4; //倒数日宽度
-let tdatewidth = width/2; //日期宽度
+let tnamewidth = width/5; //名称宽度
+let tcountwidth = width/7; //倒数日宽度
+let tdatewidth = width/5; //日期宽度
 
     return {
       type: "hstack",
