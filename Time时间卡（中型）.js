@@ -90,6 +90,7 @@ function datenotice() {
 }
 $widget.setTimeline({
   render: ctx => {
+    $widget.family = $widgetFamily.medium;
     const width = $widget.displaySize.width;
 //console.log(width);
 //设置小组件右侧显示的各部分的宽度
