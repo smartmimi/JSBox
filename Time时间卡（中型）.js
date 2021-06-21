@@ -1,3 +1,8 @@
+/**erots
+id: 603246cf9c05de42546286a1
+build: 6
+source: dea481cb4ea94b6fa89a730058675193
+*/
 /*
 在tlist里填写监控的名称及日期，参照脚本内格式
 在桌面添加JSBox小组件，长按小组件，选择此脚本j即可
@@ -7,23 +12,26 @@
 2、选择中型小组件
 */
 var tlist = {
-  1: ["春节", "2021-02-12"],
-  2: ["元宵", "2021-02-26"],
-  3: ["清明", "2021-04-04"],
-  4: ["劳动", "2021-05-01"],
-  5: ["端午", "2021-06-12"],
-  6: ["测试长度", "2021-06-30"],
-  7: ["中秋", "2021-09-19"],
-  8: ["国庆", "2021-10-01"],
-  9: ["元旦", "2022-01-01"],
-  10: ["春节", "2022-02-01"],
-  11: ["元宵", "2022-02-15"],
-  12: ["清明", "2022-04-05"],
-  13: ["劳动", "2022-05-01"],
-  14: ["端午", "2022-06-03"],
-  15: ["中秋", "2022-09-10"]
+  1: ["中秋", "2021-09-19"],
+  2: ["国庆", "2021-10-01"],
+  3: ["元旦", "2022-01-01"],
+  4: ["春节", "2022-02-01"],
+  5: ["元宵", "2022-02-15"],
+  6: ["清明", "2022-04-05"],
+  7: ["劳动", "2022-05-01"],
+  8: ["端午", "2022-06-03"],
+  9: ["中秋", "2022-09-10"]
 };
-
+//根据深色模式来变更显示颜色，用于最左侧第一个时间
+function col(dm) {
+  if (dm) {
+    //console.log(dm);
+    return "green"
+  } else {
+    //console.log(dm);
+    return "red"
+  }
+}
 let tnow = new Date();
 let tnowf =
   tnow.getFullYear() + "-" + (tnow.getMonth() + 1) + "-" + tnow.getDate();
@@ -42,9 +50,9 @@ function dateDiff(startDateString, endDateString) {
     //    Math.abs(endDate - startDate) / 1000 / 60 / 60 / 24
     //  ).toString(); //把相差的毫秒数转换为天数
     (endDate - startDate) / 1000 / 60 / 60 / 24
-  ).toString(); //把相差的毫秒数转换为天数
+  ).toString();
 }
-//var tnum = dateDiff(tnowf, tlist[1][1]);
+
 function tnumcount(num) {
   let dnum = num;
   return dateDiff(tnowf, tlist[dnum][1]);
@@ -92,65 +100,82 @@ $widget.setTimeline({
   render: ctx => {
     $widget.family = $widgetFamily.medium;
     const width = $widget.displaySize.width;
-//console.log(width);
-//设置小组件右侧显示的各部分的宽度
-let tnamewidth = width/5; //名称宽度
-let tcountwidth = width/7; //倒数日宽度
-let tdatewidth = width/5; //日期宽度
-
+    const dm = ctx.isDarkMode;
+    //console.log(width);
+    //设置小组件显示的各部分的宽度
+    let tnamewidth = width / 5; //名称宽度
+    let tcountwidth = width / 7; //倒数日宽度
+    let tdatewidth = width / 5; //日期宽度
+    let tnowwidth = width / 4;
     return {
       type: "hstack",
       props: {
         //background: $color("white"),
         alignment: $widget.verticalAlignment.right,
-        spacing: 15,
+        spacing: 10,
         frame: {
           maxWidth: Infinity,
           maxHeight: Infinity
         },
         padding: 18
       },
-      views: [
-        {
+      views: [{
           type: "vstack",
           props: {
             alignment: $widget.horizontalAlignment.center,
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: today(tnumcount(nowlist)),
                 font: $font(40),
                 bold: true,
-                color: $color("red"),
+                color: $color(col(dm)),
                 frame: {
                   height: 25,
-                  width: 80
+                  width: tnowwidth
                 }
               }
             },
+//            {
+//              type: "color",
+//              props: {
+//                frame: {
+//                  width: width/10,
+//                  height: 3
+//                },
+//                color: $color("clear"),//clear表示透明
+//                cornerRadius: 20
+//              }
+//            },
             {
-              type: "color",
+              type: "text",
               props: {
+                text: "TimeCard",
+                font: $font(10),
+                bold: true,
+styles:[{
+  obliqueness:40,
+}],
+
+                color: $color(col(dm)),
                 frame: {
-                  width: 35,
-                  height: 5
-                },
-                color: $color("red"),
-                cornerRadius: 3
+                  height: 25,
+                  width: tnowwidth
+                }
               }
-            },
+},
             {
               type: "text",
               props: {
                 text: tlist[nowlist][0],
                 font: $font(20),
-                jbold: true,
-                color: $color("red"),
+                bold: true,
+                color: $color(col(dm)),
                 frame: {
-                  height: 25
+                  height: 25,
+                  width: tnowwidth
                 }
               }
             }
@@ -169,8 +194,7 @@ let tdatewidth = width/5; //日期宽度
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][0],
@@ -231,8 +255,7 @@ let tdatewidth = width/5; //日期宽度
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tnumcount(Number(nowlist) + Number(1)),
@@ -286,15 +309,14 @@ let tdatewidth = width/5; //日期宽度
             }
           ]
         },
-//详细日期
+        //详细日期
         {
           type: "vstack",
           props: {
             alignment: "center",
             spacing: 10
           },
-          views: [
-            {
+          views: [{
               type: "text",
               props: {
                 text: tlist[Number(nowlist) + Number(1)][1],
